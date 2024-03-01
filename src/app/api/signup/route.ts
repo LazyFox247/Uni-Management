@@ -10,14 +10,14 @@ export async function POST(request: NextRequest) {
     const { username, email, password, role } = reqBody;
 
     // check if user already exists
-    // const user = await prisma.user.findUnique({ email });
+    const user = await prisma.user.findUnique({ where: { email } });
 
-    // if (user) {
-    //   return NextResponse.json(
-    //     { error: "User already exists" },
-    //     { status: 400 }
-    //   );
-    // }
+    if (user) {
+      return NextResponse.json(
+        { error: "User already exists" },
+        { status: 400 }
+      );
+    }
 
     // hash password
     const salt = await bcrypt.genSalt(10);
