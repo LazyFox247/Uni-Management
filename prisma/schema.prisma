@@ -15,18 +15,26 @@ model Profile {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String?  @db.VarChar(255)
-  email    String   @unique @db.VarChar(255)
-  password String
-  role     Role
-  ideas    Idea[]
-  profile  Profile?
+  id                        Int       @id @default(autoincrement())
+  name                      String?   @db.VarChar(255)
+  email                     String    @unique @db.VarChar(255)
+  password                  String
+  role                      Role      @default(Staff)
+  ideas                     Idea[]
+  profile                   Profile?
+  isVerified                Boolean   @default(false)
+  isStaff                   Boolean   @default(true)
+  forgotPasswordToken       String?
+  forgotPasswordTokenExpiry DateTime?
+  verifyToken               String?
+  verifyTokenExpiry         DateTime?
 }
 
 enum Role {
   Staff
   Admin
+  QA_Manager
+  QA_Coordinator
 }
 
 model Idea {
