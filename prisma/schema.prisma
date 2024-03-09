@@ -7,21 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  userId Int     @unique
-  User   User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
 model User {
-  id                        Int       @id @default(autoincrement())
-  name                      String?   @db.VarChar(255)
+  id                        String    @id @default(uuid()) @db.Uuid
+  name                      String    @db.VarChar(255)
   email                     String    @unique @db.VarChar(255)
   password                  String
-  role                      Role      @default(Staff)
+  role                      Role      @default(Admin)
   ideas                     Idea[]
-  profile                   Profile?
   isVerified                Boolean   @default(false)
   isStaff                   Boolean   @default(true)
   forgotPasswordToken       String?
@@ -38,10 +30,11 @@ enum Role {
 }
 
 model Idea {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid()) @db.Uuid
   title     String   @db.VarChar(255)
   createdAt DateTime @default(now()) @db.Timestamp(6)
-  content   String?
-  authorId  Int
+  updatedAt DateTime @default(now()) @db.Timestamp(6)
+  content   String
+  authorId  String   @db.Uuid
   author    User     @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
